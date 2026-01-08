@@ -23,6 +23,7 @@ A modern, real-time messaging application built with **Flutter** and **Firebase*
 * **Design:** Google Fonts (Inter & DotGothic16)
 
 ## 📸 Screenshots
+<img width="2048" height="2048" alt="logo" src="https://github.com/user-attachments/assets/9f43e506-58c3-40ea-af2d-b0a9cff3ee7d" />
 
 <img width="765" height="1600" alt="image" src="https://github.com/user-attachments/assets/9bcfa6f9-33db-4cb8-8237-e242b52703cc" />
 
