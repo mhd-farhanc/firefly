@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "905832012460",
-    "project_id": "firefly-chatroom",
-    "storage_bucket": "firefly-chatroom.firebasestorage.app"
+    "project_number": "568055092414",
+    "project_id": "firefly-11f82",
+    "storage_bucket": "firefly-11f82.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:905832012460:android:fcde219ad224960652dd09",
+        "mobilesdk_app_id": "1:568055092414:android:997094b7b9e6ace5b1baef",
         "android_client_info": {
           "package_name": "com.example.firefly"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAEuDgNs9OFhAdWDi67D_yLrHdeIfgu-ZM"
+          "current_key": "AIzaSyBD0Kqx54PCaGSgXJMmgykJLfvLxiANihc"
         }
       ],
       "services": {

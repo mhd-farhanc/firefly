@@ -41,48 +41,46 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCP9irCRVlDNueffeoRy4tbDgzYNl4ZU0I',
-    appId: '1:905832012460:web:bdd9ed36b59ff2de52dd09',
-    messagingSenderId: '905832012460',
-    projectId: 'firefly-chatroom',
-    authDomain: 'firefly-chatroom.firebaseapp.com',
-    storageBucket: 'firefly-chatroom.firebasestorage.app',
-    measurementId: 'G-D94TWLT9C1',
+    apiKey: 'AIzaSyBQcWyvUBSQNKbYvnWRY5fBS8O8VAQldQ0',
+    appId: '1:568055092414:web:98a07fbf118844b3b1baef',
+    messagingSenderId: '568055092414',
+    projectId: 'firefly-11f82',
+    authDomain: 'firefly-11f82.firebaseapp.com',
+    storageBucket: 'firefly-11f82.firebasestorage.app',
+    measurementId: 'G-XBYWPJZDKP',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAEuDgNs9OFhAdWDi67D_yLrHdeIfgu-ZM',
-    appId: '1:905832012460:android:fcde219ad224960652dd09',
-    messagingSenderId: '905832012460',
-    projectId: 'firefly-chatroom',
-    storageBucket: 'firefly-chatroom.firebasestorage.app',
+    apiKey: 'AIzaSyBD0Kqx54PCaGSgXJMmgykJLfvLxiANihc',
+    appId: '1:568055092414:android:997094b7b9e6ace5b1baef',
+    messagingSenderId: '568055092414',
+    projectId: 'firefly-11f82',
+    storageBucket: 'firefly-11f82.firebasestorage.app',
   );
-
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBFxMabVfaM8ETQgjhmgUHkTzz3fRogz0o',
-    appId: '1:905832012460:ios:2a4b3308f0783c8a52dd09',
-    messagingSenderId: '905832012460',
-    projectId: 'firefly-chatroom',
-    storageBucket: 'firefly-chatroom.firebasestorage.app',
+    apiKey: 'AIzaSyAPZ4cdKFFkgsWCh6XYq88XdugtCUjqYz8',
+    appId: '1:568055092414:ios:1f89bdd6150e518fb1baef',
+    messagingSenderId: '568055092414',
+    projectId: 'firefly-11f82',
+    storageBucket: 'firefly-11f82.firebasestorage.app',
     iosBundleId: 'com.example.firefly',
   );
-
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBFxMabVfaM8ETQgjhmgUHkTzz3fRogz0o',
-    appId: '1:905832012460:ios:2a4b3308f0783c8a52dd09',
-    messagingSenderId: '905832012460',
-    projectId: 'firefly-chatroom',
-    storageBucket: 'firefly-chatroom.firebasestorage.app',
+    apiKey: 'AIzaSyAPZ4cdKFFkgsWCh6XYq88XdugtCUjqYz8',
+    appId: '1:568055092414:ios:1f89bdd6150e518fb1baef',
+    messagingSenderId: '568055092414',
+    projectId: 'firefly-11f82',
+    storageBucket: 'firefly-11f82.firebasestorage.app',
     iosBundleId: 'com.example.firefly',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyCP9irCRVlDNueffeoRy4tbDgzYNl4ZU0I',
-    appId: '1:905832012460:web:390751d8426a1fd052dd09',
-    messagingSenderId: '905832012460',
-    projectId: 'firefly-chatroom',
-    authDomain: 'firefly-chatroom.firebaseapp.com',
-    storageBucket: 'firefly-chatroom.firebasestorage.app',
-    measurementId: 'G-S44KD00X5B',
+    apiKey: 'AIzaSyBQcWyvUBSQNKbYvnWRY5fBS8O8VAQldQ0',
+    appId: '1:568055092414:web:8d5df88dd6e75423b1baef',
+    messagingSenderId: '568055092414',
+    projectId: 'firefly-11f82',
+    authDomain: 'firefly-11f82.firebaseapp.com',
+    storageBucket: 'firefly-11f82.firebasestorage.app',
+    measurementId: 'G-CWT37BWCWT',
   );
 }
