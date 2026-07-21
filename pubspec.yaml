@@ -24,6 +24,8 @@ dependencies:
   # Push Notifications
   firebase_messaging: ^15.2.0
   flutter_local_notifications: ^18.0.0
+  http: ^1.2.0
+  googleapis_auth: ^1.6.0
 
 dev_dependencies:
   flutter_test:

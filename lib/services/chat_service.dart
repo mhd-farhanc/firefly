@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../models/message_model.dart';
+import 'fcm_sender.dart';
 
 class ChatService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // Get correct room ID
   String getRoomId(String userId) {
     final currentUserId = _auth.currentUser!.uid;
     List<String> ids = [currentUserId, userId];
@@ -14,7 +14,6 @@ class ChatService {
     return ids.join('_');
   }
 
-  // Send Message
   Future<void> sendMessage(String receiverId, String text) async {
     final currentUserId = _auth.currentUser!.uid;
     final roomId = getRoomId(receiverId);
@@ -30,9 +29,19 @@ class ChatService {
         .doc(roomId)
         .collection('messages')
         .add(message.toMap());
+
+    final currentUserDoc =
+        await _firestore.collection('users').doc(currentUserId).get();
+    final senderName = currentUserDoc.data()?['username'] ?? 'Someone';
+
+    FcmSender.notifyReceiver(
+      receiverId: receiverId,
+      senderName: senderName,
+      messageText: text,
+      senderId: currentUserId,
+    );
   }
 
-  // Get Messages Stream
   Stream<QuerySnapshot> getMessages(String receiverId) {
     final roomId = getRoomId(receiverId);
 
@@ -40,7 +49,7 @@ class ChatService {
         .collection('chat_rooms')
         .doc(roomId)
         .collection('messages')
-        .orderBy('timestamp', descending: false) // Oldest top, newest bottom
+        .orderBy('timestamp', descending: false)
         .snapshots();
   }
 }
