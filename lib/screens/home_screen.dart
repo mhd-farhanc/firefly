@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../services/auth_service.dart';
 import '../services/request_service.dart';
 import 'search_screen.dart';
@@ -16,21 +17,34 @@ class HomeScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF262626),
-        title: const Text("Log Out", style: TextStyle(color: Colors.white)),
-        content: const Text(
-          "Are you sure you want to log out?",
-          style: TextStyle(color: Colors.grey),
+        backgroundColor: FireflyTheme.darkBlock,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.zero,
+        ),
+        title: Text(
+          "LOG OUT",
+          style: GoogleFonts.anton(
+            color: FireflyTheme.textOnDark,
+            fontSize: 24,
+            letterSpacing: 2,
+          ),
+        ),
+        content: Text(
+          "ARE YOU SURE YOU WANT TO LOG OUT?",
+          style: GoogleFonts.shareTechMono(color: FireflyTheme.textOnDark),
         ),
         actions: [
           TextButton(
-            child: const Text("Cancel", style: TextStyle(color: Colors.white)),
+            child: Text(
+              "CANCEL",
+              style: GoogleFonts.shareTechMono(color: FireflyTheme.textOnDark),
+            ),
             onPressed: () => Navigator.pop(context),
           ),
           TextButton(
-            child: const Text(
-              "Log Out",
-              style: TextStyle(color: FireflyTheme.red),
+            child: Text(
+              "LOG OUT",
+              style: GoogleFonts.shareTechMono(color: FireflyTheme.textOnDark),
             ),
             onPressed: () {
               Navigator.pop(context);
@@ -49,10 +63,12 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Firefly"),
-        backgroundColor: Colors.black,
+        title: const Text("FIREFLY"),
+        backgroundColor: FireflyTheme.darkBlock,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.zero,
+        ),
         actions: [
-          // Notifications Icon
           StreamBuilder<List>(
             stream: requestService.getIncomingRequests(),
             builder: (context, snapshot) {
@@ -63,7 +79,9 @@ class HomeScreen extends StatelessWidget {
                     icon: const Icon(Icons.notifications_outlined),
                     onPressed: () => Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => const RequestsScreen()),
+                      MaterialPageRoute(
+                        builder: (_) => const RequestsScreen(),
+                      ),
                     ),
                   ),
                   if (hasRequests)
@@ -71,11 +89,8 @@ class HomeScreen extends StatelessWidget {
                       right: 11,
                       top: 11,
                       child: Container(
-                        padding: const EdgeInsets.all(2),
-                        decoration: const BoxDecoration(
-                          color: FireflyTheme.red,
-                          shape: BoxShape.circle,
-                        ),
+                        padding: const EdgeInsets.all(4),
+                        color: FireflyTheme.lightBlock,
                         constraints: const BoxConstraints(
                           minWidth: 8,
                           minHeight: 8,
@@ -93,38 +108,50 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: FireflyTheme.red,
-        child: const Icon(Icons.search, color: Colors.white),
+        backgroundColor: FireflyTheme.lightBlock,
+        foregroundColor: FireflyTheme.textOnLight,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.zero,
+        ),
+        child: const Icon(Icons.search),
         onPressed: () => Navigator.push(
           context,
           MaterialPageRoute(builder: (_) => const SearchScreen()),
         ),
       ),
-      // Active Chats List
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('requests')
             .where('status', isEqualTo: 'accepted')
             .snapshots(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData)
+          if (!snapshot.hasData) {
             return const Center(
-              child: CircularProgressIndicator(color: FireflyTheme.red),
+              child: CircularProgressIndicator(
+                color: FireflyTheme.textOnDark,
+              ),
             );
+          }
 
-          // 1. Filter chats where I am a participant
           var myChats = snapshot.data!.docs.where((doc) {
             final data = doc.data() as Map<String, dynamic>;
-            // FIX: Added '!' to currentUser!.uid to fix the null error
             return data['fromId'] == currentUser!.uid ||
                 data['toId'] == currentUser.uid;
           }).toList();
 
           if (myChats.isEmpty) {
-            return const Center(
-              child: Text(
-                "No chats yet. Search for friends!",
-                style: TextStyle(color: Colors.grey),
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(32),
+                child: Text(
+                  "NO CHATS YET.\nSEARCH FOR FRIENDS!",
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.shareTechMono(
+                    color: FireflyTheme.textOnDark,
+                    fontSize: 16,
+                    height: 1.6,
+                  ),
+                ),
               ),
             );
           }
@@ -133,8 +160,6 @@ class HomeScreen extends StatelessWidget {
             itemCount: myChats.length,
             itemBuilder: (context, index) {
               final data = myChats[index].data() as Map<String, dynamic>;
-
-              // FIX: Added '!' here as well
               final isMeSender = data['fromId'] == currentUser!.uid;
 
               String otherName = isMeSender
@@ -142,30 +167,9 @@ class HomeScreen extends StatelessWidget {
                   : (data['fromName'] ?? "Unknown");
               final otherId = isMeSender ? data['toId'] : data['fromId'];
 
-              return ListTile(
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 8,
-                ),
-                title: Text(
-                  otherName,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                subtitle: const Text(
-                  "Tap to chat",
-                  style: TextStyle(color: Colors.grey, fontSize: 12),
-                ),
-                leading: CircleAvatar(
-                  backgroundColor: FireflyTheme.grey,
-                  child: Text(
-                    otherName[0].toUpperCase(),
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                ),
+              final isEven = index.isEven;
+
+              return GestureDetector(
                 onTap: () {
                   Navigator.push(
                     context,
@@ -177,6 +181,65 @@ class HomeScreen extends StatelessWidget {
                     ),
                   );
                 },
+                child: Container(
+                  color: isEven
+                      ? FireflyTheme.darkBlock
+                      : FireflyTheme.lightBlock,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 18,
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        color: isEven
+                            ? FireflyTheme.lightBlock
+                            : FireflyTheme.darkBlock,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 12,
+                        ),
+                        child: Text(
+                          otherName[0].toUpperCase(),
+                          style: GoogleFonts.anton(
+                            color: isEven
+                                ? FireflyTheme.textOnLight
+                                : FireflyTheme.textOnDark,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              otherName.toUpperCase(),
+                              style: GoogleFonts.anton(
+                                color: isEven
+                                    ? FireflyTheme.textOnDark
+                                    : FireflyTheme.textOnLight,
+                                fontSize: 18,
+                                letterSpacing: 1,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              "TAP TO CHAT",
+                              style: GoogleFonts.shareTechMono(
+                                color: isEven
+                                    ? FireflyTheme.textOnDark
+                                    : FireflyTheme.textOnLight,
+                                fontSize: 11,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               );
             },
           );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../models/request_model.dart';
 import '../services/request_service.dart';
 import '../theme/app_theme.dart';
@@ -12,17 +13,26 @@ class RequestsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Friend Requests"),
-        backgroundColor: Colors.black,
+        title: const Text("FRIEND REQUESTS"),
+        backgroundColor: FireflyTheme.darkBlock,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.zero,
+        ),
       ),
       body: StreamBuilder<List<ChatRequest>>(
         stream: requestService.getIncomingRequests(),
         builder: (context, snapshot) {
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(
-              child: Text(
-                "No pending requests",
-                style: TextStyle(color: Colors.grey),
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(32),
+                child: Text(
+                  "NO PENDING REQUESTS",
+                  style: GoogleFonts.shareTechMono(
+                    color: FireflyTheme.textOnDark,
+                    fontSize: 16,
+                  ),
+                ),
               ),
             );
           }
@@ -31,46 +41,114 @@ class RequestsScreen extends StatelessWidget {
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
               final req = snapshot.data![index];
+              final isEven = index.isEven;
 
               return Container(
-                margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                decoration: BoxDecoration(
-                  color: FireflyTheme.grey,
-                  borderRadius: BorderRadius.circular(10),
+                color: isEven
+                    ? FireflyTheme.darkBlock
+                    : FireflyTheme.lightBlock,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 14,
                 ),
-                child: ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: Colors.black,
-                    child: Text(
-                      req.fromName[0].toUpperCase(),
-                      style: const TextStyle(color: FireflyTheme.red),
+                child: Row(
+                  children: [
+                    Container(
+                      color: isEven
+                          ? FireflyTheme.lightBlock
+                          : FireflyTheme.darkBlock,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 12,
+                      ),
+                      child: Text(
+                        req.fromName[0].toUpperCase(),
+                        style: GoogleFonts.anton(
+                          color: isEven
+                              ? FireflyTheme.textOnLight
+                              : FireflyTheme.textOnDark,
+                          fontSize: 18,
+                        ),
+                      ),
                     ),
-                  ),
-                  title: Text(
-                    req.fromName,
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                  subtitle: const Text(
-                    "Wants to chat with you",
-                    style: TextStyle(color: Colors.grey, fontSize: 12),
-                  ),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      // Reject Button (X)
-                      IconButton(
-                        icon: const Icon(Icons.close, color: Colors.grey),
-                        onPressed: () =>
-                            requestService.rejectRequest(req.fromId),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            req.fromName.toUpperCase(),
+                            style: GoogleFonts.anton(
+                              color: isEven
+                                  ? FireflyTheme.textOnDark
+                                  : FireflyTheme.textOnLight,
+                              fontSize: 18,
+                              letterSpacing: 1,
+                            ),
+                          ),
+                          Text(
+                            "WANTS TO CHAT",
+                            style: GoogleFonts.shareTechMono(
+                              color: isEven
+                                  ? FireflyTheme.textOnDark
+                                  : FireflyTheme.textOnLight,
+                              fontSize: 11,
+                            ),
+                          ),
+                        ],
                       ),
-                      // Accept Button (Check)
-                      IconButton(
-                        icon: const Icon(Icons.check, color: FireflyTheme.red),
-                        onPressed: () =>
-                            requestService.acceptRequest(req.fromId),
-                      ),
-                    ],
-                  ),
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        GestureDetector(
+                          onTap: () =>
+                              requestService.rejectRequest(req.fromId),
+                          child: Container(
+                            color: isEven
+                                ? FireflyTheme.lightBlock
+                                : FireflyTheme.darkBlock,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 14,
+                              vertical: 12,
+                            ),
+                            child: Text(
+                              "✕",
+                              style: GoogleFonts.anton(
+                                color: isEven
+                                    ? FireflyTheme.textOnLight
+                                    : FireflyTheme.textOnDark,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        GestureDetector(
+                          onTap: () =>
+                              requestService.acceptRequest(req.fromId),
+                          child: Container(
+                            color: isEven
+                                ? FireflyTheme.lightBlock
+                                : FireflyTheme.darkBlock,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 14,
+                              vertical: 12,
+                            ),
+                            child: Text(
+                              "✓",
+                              style: GoogleFonts.anton(
+                                color: isEven
+                                    ? FireflyTheme.textOnLight
+                                    : FireflyTheme.textOnDark,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               );
             },

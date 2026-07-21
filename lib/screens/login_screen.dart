@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../services/auth_service.dart';
 import '../theme/app_theme.dart';
 
@@ -13,9 +14,9 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _emailCtrl = TextEditingController();
   final _passCtrl = TextEditingController();
-  final _usernameCtrl = TextEditingController(); // Added for Sign Up
+  final _usernameCtrl = TextEditingController();
 
-  bool _isLogin = true; // Toggle between Login and Sign Up
+  bool _isLogin = true;
   bool _isLoading = false;
 
   void _submit() async {
@@ -25,7 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final username = _usernameCtrl.text.trim();
 
     if (email.isEmpty || pass.isEmpty) return;
-    if (!_isLogin && username.isEmpty) return; // Username required for signup
+    if (!_isLogin && username.isEmpty) return;
 
     setState(() => _isLoading = true);
 
@@ -41,8 +42,16 @@ class _LoginScreenState extends State<LoginScreen> {
       if (error != null) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(error, style: const TextStyle(color: Colors.white)),
-            backgroundColor: FireflyTheme.red,
+            content: Text(
+              error,
+              style: GoogleFonts.shareTechMono(color: FireflyTheme.textOnDark),
+            ),
+            backgroundColor: FireflyTheme.darkBlock,
+            elevation: 0,
+            behavior: SnackBarBehavior.fixed,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.zero,
+            ),
           ),
         );
       }
@@ -59,94 +68,75 @@ class _LoginScreenState extends State<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // 1. App Title
               Text(
-                "Firefly",
+                "FIREFLY",
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.headlineLarge,
               ),
               const SizedBox(height: 10),
-
-              // 2. Friendly Subtitle (Fixed Bug 5)
               Text(
-                _isLogin ? "Welcome Back" : "Create Account",
+                _isLogin ? "WELCOME BACK" : "CREATE ACCOUNT",
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: FireflyTheme.red,
-                  letterSpacing: 1.2,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+                style: GoogleFonts.anton(
+                  color: FireflyTheme.textOnDark,
+                  fontSize: 18,
+                  letterSpacing: 3,
                 ),
               ),
               const SizedBox(height: 40),
-
-              // 3. Username Field (Only show if Signing Up)
               if (!_isLogin) ...[
                 TextField(
                   controller: _usernameCtrl,
-                  style: const TextStyle(color: Colors.white),
+                  style: GoogleFonts.shareTechMono(
+                    color: FireflyTheme.textOnDark,
+                    fontSize: 16,
+                  ),
                   decoration: const InputDecoration(
-                    labelText: "Username",
-                    prefixIcon: Icon(Icons.person_outline, color: Colors.grey),
+                    hintText: "USERNAME",
                   ),
                 ),
                 const SizedBox(height: 16),
               ],
-
-              // 4. Email Field
               TextField(
                 controller: _emailCtrl,
-                style: const TextStyle(color: Colors.white),
+                style: GoogleFonts.shareTechMono(
+                  color: FireflyTheme.textOnDark,
+                  fontSize: 16,
+                ),
                 decoration: const InputDecoration(
-                  labelText: "Email",
-                  prefixIcon: Icon(Icons.email_outlined, color: Colors.grey),
+                  hintText: "EMAIL",
                 ),
               ),
               const SizedBox(height: 16),
-
-              // 5. Password Field
               TextField(
                 controller: _passCtrl,
                 obscureText: true,
-                style: const TextStyle(color: Colors.white),
+                style: GoogleFonts.shareTechMono(
+                  color: FireflyTheme.textOnDark,
+                  fontSize: 16,
+                ),
                 decoration: const InputDecoration(
-                  labelText: "Password",
-                  prefixIcon: Icon(Icons.lock_outline, color: Colors.grey),
+                  hintText: "PASSWORD",
                 ),
               ),
               const SizedBox(height: 32),
-
-              // 6. Action Button
               _isLoading
                   ? const Center(
-                      child: CircularProgressIndicator(color: FireflyTheme.red),
+                      child: CircularProgressIndicator(
+                        color: FireflyTheme.textOnDark,
+                      ),
                     )
                   : ElevatedButton(
                       onPressed: _submit,
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        backgroundColor: FireflyTheme.red,
-                      ),
                       child: Text(
-                        _isLogin ? "Sign In" : "Sign Up",
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
+                        _isLogin ? "SIGN IN" : "SIGN UP",
                       ),
                     ),
-
               const SizedBox(height: 16),
-
-              // 7. Toggle Button (Switch between Login/Signup)
               TextButton(
                 onPressed: () => setState(() => _isLogin = !_isLogin),
                 child: Text(
-                  _isLogin
-                      ? "Create a new account"
-                      : "I already have an account",
-                  style: const TextStyle(color: Colors.grey),
+                  _isLogin ? "CREATE A NEW ACCOUNT" : "I ALREADY HAVE AN ACCOUNT",
                 ),
               ),
             ],
