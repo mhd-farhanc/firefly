@@ -18,6 +18,13 @@ class NotificationService {
   void Function(String senderId, String senderName)? onNotificationTap;
 
   Future<void> initialize() async {
+    await Future.wait([
+      _initFcm(),
+      _initLocalNotifications(),
+    ]);
+  }
+
+  Future<void> _initLocalNotifications() async {
     try {
       const androidChannel = AndroidNotificationChannel(
         'chat_messages',
@@ -33,7 +40,7 @@ class NotificationService {
           ?.createNotificationChannel(androidChannel);
 
       const androidSettings =
-          AndroidInitializationSettings('ic_launcher');
+          AndroidInitializationSettings('ic_launcher_foreground');
       const iosSettings = DarwinInitializationSettings(
         requestAlertPermission: true,
         requestBadgePermission: true,
@@ -54,17 +61,23 @@ class NotificationService {
           }
         },
       );
+    } catch (e) {
+      debugPrint('Local notifications init skipped: $e');
+    }
+  }
 
-      final settings = await _messaging.requestPermission(
-        alert: true,
-        badge: true,
-        sound: true,
-      );
-
-      if (settings.authorizationStatus == AuthorizationStatus.authorized ||
-          settings.authorizationStatus == AuthorizationStatus.provisional) {
-        await _saveFcmToken();
+  Future<void> _initFcm() async {
+    try {
+      try {
+        await _messaging.requestPermission(
+          alert: true,
+          badge: true,
+          sound: true,
+        );
+      } catch (_) {
       }
+
+      await _saveFcmToken();
 
       _messaging.onTokenRefresh.listen(_saveFcmTokenToFirestore);
 
@@ -74,7 +87,7 @@ class NotificationService {
         if (notification != null) {
           _showLocalNotification(
             data['senderId'],
-            data['senderName'] ?? notification.title ?? 'New Message',
+            notification.title ?? 'New Message',
             notification.body ?? '',
           );
         }
@@ -99,7 +112,7 @@ class NotificationService {
         }
       }
     } catch (e) {
-      debugPrint('NotificationService initialization failed: $e');
+      debugPrint('FCM init error: $e');
     }
   }
 
@@ -107,7 +120,8 @@ class NotificationService {
     try {
       final token = await _messaging.getToken();
       if (token != null) {
-        _saveFcmTokenToFirestore(token);
+        await _saveFcmTokenToFirestore(token);
+        debugPrint('FCM token saved: ${token.substring(0, 20)}...');
       }
     } catch (e) {
       debugPrint('Failed to save FCM token: $e');
