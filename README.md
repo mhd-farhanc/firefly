@@ -15,6 +15,7 @@
 ## FEATURES
 
 - **Real-time Messaging** - Instant delivery using Cloud Firestore streams.
+- **Push Notifications** - FCM notifications sent directly from client via Firebase Admin SDK service account. No Cloud Functions required — works on Spark plan.
 - **Secure Authentication** - Email & password login/signup powered by Firebase Auth.
 - **Friend System**
   - Search for users by username.
@@ -29,9 +30,10 @@
 ## TECH STACK
 
 - **Frontend:** Flutter (Dart)
-- **Backend:** Firebase (Firestore, Authentication)
+- **Backend:** Firebase (Firestore, Authentication, Cloud Messaging)
 - **State Management:** Provider
 - **Typography:** Google Fonts (Anton & ShareTechMono)
+- **Notifications:** firebase_messaging, flutter_local_notifications, googleapis_auth
 
 ## GETTING STARTED
 
