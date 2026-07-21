@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -16,6 +17,7 @@ class NotificationService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   void Function(String senderId, String senderName)? onNotificationTap;
+  StreamSubscription<User?>? _authSub;
 
   Future<void> initialize() async {
     await Future.wait([
@@ -78,6 +80,13 @@ class NotificationService {
       }
 
       await _saveFcmToken();
+
+      _authSub?.cancel();
+      _authSub = _auth.authStateChanges().listen((user) {
+        if (user != null) {
+          _saveFcmToken();
+        }
+      });
 
       _messaging.onTokenRefresh.listen(_saveFcmTokenToFirestore);
 
