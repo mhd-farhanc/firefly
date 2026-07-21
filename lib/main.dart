@@ -16,7 +16,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  await NotificationService().initialize();
   NotificationService().onNotificationTap = (senderId, senderName) {
     navigatorKey.currentState?.push(
       MaterialPageRoute(
@@ -27,6 +26,7 @@ void main() async {
       ),
     );
   };
+  NotificationService().initialize();
 
   runApp(
     MultiProvider(
