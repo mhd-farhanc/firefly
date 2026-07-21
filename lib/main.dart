@@ -4,13 +4,29 @@ import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'theme/app_theme.dart';
 import 'services/auth_service.dart';
+import 'services/notification_service.dart';
 import 'screens/login_screen.dart';
-import 'screens/home_screen.dart'; // Updated
+import 'screens/home_screen.dart';
+import 'screens/chat_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  await NotificationService().initialize();
+  NotificationService().onNotificationTap = (senderId, senderName) {
+    navigatorKey.currentState?.push(
+      MaterialPageRoute(
+        builder: (_) => ChatScreen(
+          receiverId: senderId,
+          receiverName: senderName,
+        ),
+      ),
+    );
+  };
 
   runApp(
     MultiProvider(
@@ -26,6 +42,7 @@ class FireflyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       title: 'Firefly',
       theme: FireflyTheme.theme,
